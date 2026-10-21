@@ -12,6 +12,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: result.error }, { status: 400 });
   }
 
-  writeSocialLinks(result.links);
+  try {
+    writeSocialLinks(result.links);
+  } catch {
+    return NextResponse.json(
+      { error: "This host cannot save link changes. Edit data/social.json and redeploy." },
+      { status: 500 },
+    );
+  }
   return NextResponse.json(result.links);
 }

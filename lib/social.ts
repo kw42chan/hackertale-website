@@ -1,13 +1,18 @@
 import fs from "fs";
 import path from "path";
 import { connection } from "next/server";
+import defaultSocial from "@/data/social.json";
 import { socialFieldList, type SocialLinks } from "@/lib/social-fields";
 
 const filePath = path.join(process.cwd(), "data", "social.json");
 
 export async function getSocialLinks(): Promise<SocialLinks> {
   await connection();
-  return JSON.parse(fs.readFileSync(filePath, "utf8")) as SocialLinks;
+  try {
+    return JSON.parse(fs.readFileSync(filePath, "utf8")) as SocialLinks;
+  } catch {
+    return defaultSocial as SocialLinks;
+  }
 }
 
 export function writeSocialLinks(links: SocialLinks) {
